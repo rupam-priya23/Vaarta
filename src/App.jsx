@@ -8,7 +8,6 @@ function DoodleBackground() {
       preserveAspectRatio="xMidYMid slice"
       style={{ position: "absolute", inset: 0, zIndex: 0 }}
     >
-      {/* Big soft blobs */}
       <path
         d="M180 280 C80 80, 420 100, 360 300 C300 520, 120 480, 180 280 Z"
         fill="#e0e7ff"
@@ -19,8 +18,6 @@ function DoodleBackground() {
         fill="#ecfeff"
         opacity="0.6"
       />
-
-      {/* Doodle curves */}
       <path
         d="M200 120 Q400 40 600 140"
         stroke="#6366f1"
@@ -37,11 +34,6 @@ function DoodleBackground() {
         strokeDasharray="6 6"
         opacity="0.4"
       />
-
-      {/* Stars / dots */}
-      <circle cx="240" cy="680" r="4" fill="#a855f7" opacity="0.6" />
-      <circle cx="1180" cy="520" r="4" fill="#6366f1" opacity="0.6" />
-      <circle cx="620" cy="200" r="4" fill="#06b6d4" opacity="0.6" />
     </svg>
   );
 }
@@ -80,7 +72,7 @@ export default function App() {
       <DoodleBackground />
 
       <div style={{ ...styles.page, position: "relative", zIndex: 1 }}>
-        {/* ARTISTIC HEADING */}
+        {/* HEADING */}
         <div style={styles.brandWrap}>
           <h1 style={styles.brandArt}>
             <span style={{ color: "#4f46e5" }}>V</span>
@@ -90,9 +82,7 @@ export default function App() {
             <span style={{ color: "#0ea5e9" }}>T</span>
             <span style={{ color: "#9333ea" }}>A</span>
           </h1>
-
-          {/* Hand-drawn underline */}
-          <svg width="200" height="18" viewBox="0 0 200 18">
+          <svg width="200" height="18">
             <path
               d="M10 12 Q100 2 190 12"
               stroke="#6366f1"
@@ -107,7 +97,7 @@ export default function App() {
         <div style={styles.timer}>📞 {time}</div>
 
         <div style={styles.scene}>
-          {/* LEFT (ENGLISH) */}
+          {/* LEFT – ENGLISH */}
           <PersonCard
             title="Office"
             name="Rishi"
@@ -118,10 +108,11 @@ export default function App() {
                 ? current.original
                 : current.translated
             }
+            isTranslated={current.speaker !== "left"}
             bg="#eef2ff"
           />
 
-          {/* RIGHT (HINDI) */}
+          {/* RIGHT – HINDI */}
           <PersonCard
             title="Street"
             name="Ankita"
@@ -132,6 +123,7 @@ export default function App() {
                 ? current.original
                 : current.translated
             }
+            isTranslated={current.speaker !== "right"}
             bg="#ecfeff"
           />
         </div>
@@ -141,12 +133,12 @@ export default function App() {
 }
 
 /* ---------------- PERSON CARD ---------------- */
-function PersonCard({ title, name, lang, speaking, text, bg }) {
+function PersonCard({ title, name, lang, speaking, text, isTranslated, bg }) {
   return (
     <div style={{ ...styles.card, background: bg }}>
       <div style={styles.cardTitle}>{title}</div>
 
-      {/* Illustrated doodle person */}
+      {/* Illustrated person */}
       <svg width="160" height="220" viewBox="0 0 160 220">
         <circle cx="80" cy="40" r="26" fill="#fde68a" />
         <path d="M55 38 Q80 10 105 38" fill="#1f2937" />
@@ -161,7 +153,17 @@ function PersonCard({ title, name, lang, speaking, text, bg }) {
       <p style={styles.lang}>{lang}</p>
       <p style={styles.status}>{speaking ? "Speaking…" : "Listening…"}</p>
 
-      <div style={styles.bubble}>{text}</div>
+      {/* 🔥 TRANSLATION HIGHLIGHT */}
+      <div
+        style={{
+          ...styles.bubble,
+          ...(isTranslated ? styles.translatedBubble : {}),
+        }}
+      >
+        <span style={{ fontWeight: isTranslated ? "700" : "400" }}>
+          {text}
+        </span>
+      </div>
     </div>
   );
 }
@@ -176,38 +178,31 @@ const styles = {
     paddingTop: "24px",
     fontFamily: "Segoe UI, sans-serif",
   },
-
   brandWrap: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-
   brandArt: {
     fontSize: "56px",
     fontWeight: "900",
     letterSpacing: "6px",
-    marginBottom: "2px",
   },
-
   tagline: {
     color: "#475569",
     marginBottom: "8px",
     fontSize: "15px",
   },
-
   timer: {
     fontSize: "18px",
     fontWeight: "600",
     marginBottom: "30px",
     color: "#334155",
   },
-
   scene: {
     display: "flex",
     gap: "80px",
   },
-
   card: {
     width: "320px",
     borderRadius: "24px",
@@ -215,27 +210,22 @@ const styles = {
     textAlign: "center",
     boxShadow: "0 12px 30px rgba(0,0,0,0.12)",
   },
-
   cardTitle: {
     fontWeight: "700",
     marginBottom: "10px",
     color: "#4f46e5",
   },
-
   name: {
     fontWeight: "700",
   },
-
   lang: {
     fontSize: "14px",
     color: "#444",
   },
-
   status: {
     fontSize: "14px",
     marginBottom: "8px",
   },
-
   bubble: {
     background: "#ffffff",
     padding: "14px",
@@ -243,5 +233,10 @@ const styles = {
     fontSize: "14px",
     marginTop: "10px",
     boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+  },
+  translatedBubble: {
+    border: "2px solid #6366f1",
+    boxShadow: "0 0 18px rgba(99,102,241,0.35)",
+    background: "#f8fafc",
   },
 };
