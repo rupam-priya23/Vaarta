@@ -56,6 +56,10 @@ export default function App() {
   const [step, setStep] = useState(0);
   const [seconds, setSeconds] = useState(45);
 
+  // NEW: language state
+  const [leftLang, setLeftLang] = useState("English");
+  const [rightLang, setRightLang] = useState("Hindi");
+
   useEffect(() => {
     const interval = setInterval(() => {
       setStep((p) => (p + 1) % conversation.length);
@@ -97,11 +101,12 @@ export default function App() {
         <div style={styles.timer}>📞 {time}</div>
 
         <div style={styles.scene}>
-          {/* LEFT – ENGLISH */}
+          {/* LEFT SIDE */}
           <PersonCard
             title="Office"
             name="Rishi"
-            lang="English"
+            language={leftLang}
+            onLanguageChange={setLeftLang}
             speaking={current.speaker === "left"}
             text={
               current.speaker === "left"
@@ -112,11 +117,12 @@ export default function App() {
             bg="#eef2ff"
           />
 
-          {/* RIGHT – HINDI */}
+          {/* RIGHT SIDE */}
           <PersonCard
             title="Street"
             name="Ankita"
-            lang="Hindi"
+            language={rightLang}
+            onLanguageChange={setRightLang}
             speaking={current.speaker === "right"}
             text={
               current.speaker === "right"
@@ -133,7 +139,16 @@ export default function App() {
 }
 
 /* ---------------- PERSON CARD ---------------- */
-function PersonCard({ title, name, lang, speaking, text, isTranslated, bg }) {
+function PersonCard({
+  title,
+  name,
+  language,
+  onLanguageChange,
+  speaking,
+  text,
+  isTranslated,
+  bg,
+}) {
   return (
     <div style={{ ...styles.card, background: bg }}>
       <div style={styles.cardTitle}>{title}</div>
@@ -150,10 +165,33 @@ function PersonCard({ title, name, lang, speaking, text, isTranslated, bg }) {
       </svg>
 
       <p style={styles.name}>{name}</p>
-      <p style={styles.lang}>{lang}</p>
+
+      {/* LANGUAGE SELECTOR */}
+      <select
+        value={language}
+        onChange={(e) => onLanguageChange(e.target.value)}
+        style={styles.languageSelect}
+      >
+        <option>English</option>
+        <option>Hindi</option>
+        <option>Punjabi</option>
+        <option>Marathi</option>
+        <option>Tamil</option>
+        <option>Gujrati</option>
+        <option>Bhojpuri</option>
+        <option>Telugu</option>
+        <option>Kannada</option>
+        <option>Malayalam</option>  
+        <option>Odia</option>
+        <option>Assamese</option>
+        <option>Maithili</option>
+        <option>Urdu</option>
+        <option>Bengali</option>
+      </select>
+
       <p style={styles.status}>{speaking ? "Speaking…" : "Listening…"}</p>
 
-      {/* 🔥 TRANSLATION HIGHLIGHT */}
+      {/* TRANSLATION HIGHLIGHT */}
       <div
         style={{
           ...styles.bubble,
@@ -218,13 +256,17 @@ const styles = {
   name: {
     fontWeight: "700",
   },
-  lang: {
-    fontSize: "14px",
-    color: "#444",
-  },
   status: {
     fontSize: "14px",
     marginBottom: "8px",
+  },
+  languageSelect: {
+    margin: "8px 0 10px",
+    padding: "6px 10px",
+    borderRadius: "10px",
+    border: "1px solid #c7d2fe",
+    background: "#fff",
+    fontSize: "13px",
   },
   bubble: {
     background: "#ffffff",
